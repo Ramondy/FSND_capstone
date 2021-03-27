@@ -1,0 +1,11 @@
+- DEFINIR APP BAREBONE
+-- modèle de données
+-- fonctionalités
+-- endpoints
+-- squelette frontend
+-- CORS
+-- tests
+-- documentation
+
+- AUTHENTICATION ANd AUTHORIZATION
+-- users, roles, permissions
