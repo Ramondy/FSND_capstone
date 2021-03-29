@@ -10,12 +10,13 @@
 There are two types of users : Fundraisers and Contributors. Fundraisers create Money_pots,
 Contributors pledge money to Money_pots. 
 
-- a Fundraiser creates a Money_pot to raise money
-- a Fundraiser updates, closes or deletes a Money_pot at will
+DONE - a Fundraiser creates a Money_pot to raise money
+DONE - a Fundraiser updates, closes or deletes a Money_pot at will
 
-- the list of all open Money_pots is accessible to both Fundraisers and Contributors
-- a User pledges money to any Money_pot
-- pledges are anonymous except to the Fundraiser
+DONE - the list of all open Money_pots is accessible to both Fundraisers and Contributors
+DONE - a Contributor pledges money to any Money_pot
+- a Contributor can get details of his pledges
+- a Fundraiser can get details of all pledges for a Money_Pot
 
 ## Auth0 User IDs
 API: FSND
@@ -40,7 +41,14 @@ curl -X GET http://127.0.0.1:8080/money_pots
 
 POST MONEY_POT:
 curl -X POST http://127.0.0.1:8080/money_pots -H "Content-Type: application/json" -d '{"title":"second money_pot", "description":"This is the second one.", "target":"100", "owner_id":"1"}'
+curl -X POST http://127.0.0.1:8080/money_pots -H "Content-Type: application/json" -d '{"title":"third money_pot", "description":"No need.", "owner_id":"1"}'
 
 POST PLEDGE:
 curl -X POST http://127.0.0.1:8080/pledges -H "Content-Type: application/json" -d '{"user_id":"2", "money_pot_id":"1", "amount":"10"}'
 
+PATCH MONEY_POT:
+curl -X PATCH http://127.0.0.1:8080/money_pots/2 -H "Content-Type: application/json" -d '{"description":"This is the new description."}'
+curl -X PATCH http://127.0.0.1:8080/money_pots/2 -H "Content-Type: application/json" -d '{"status":"closed"}'
+
+DELETE MONEY_POT:
+curl -X DELETE http://127.0.0.1:8080/money_pots/3 -H "Content-Type: application/json"

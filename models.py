@@ -69,7 +69,8 @@ class User(db.Model):
             'id': self.id,
             'name': self.name,
             'email': self.email,
-            'money_pots': [money_pot.format() for money_pot in self.money_pots]
+            'money_pots': [money_pot.format() for money_pot in self.money_pots],
+            'pledges': [pledge.format() for pledge in self.pledges]
         }
 
 

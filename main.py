@@ -27,6 +27,15 @@ def get_users():
     return jsonify(users)
 
 
+@app.route('/users/<int:user_id>', methods=['GET'])
+def get_user_details(user_id):
+    selection_user = User.query.filter(User.id == user_id).one_or_none()
+    if selection_user is not None:
+
+        # selection_pledges = [pledge.format() for pledge in selection_user.pledges]
+        return jsonify(selection_user.format())
+
+
 @app.route('/money_pots', methods=['POST'])
 def create_money_pot():
     data = request.get_json()
@@ -52,6 +61,59 @@ def get_money_pots():
     money_pots = MoneyPot.query.all()
     money_pots = [money_pot.format() for money_pot in money_pots]
     return jsonify(money_pots)
+
+
+@app.route('/money_pots/<int:money_pot_id>', methods=['GET'])
+def get_money_pot_details(money_pot_id):
+
+    selection_money_pot = MoneyPot.query.filter(MoneyPot.id == money_pot_id).one_or_none()
+    if selection_money_pot is not None:
+
+        selection_pledges = [pledge.format() for pledge in selection_money_pot.pledges]
+        return jsonify(selection_money_pot.format(), selection_pledges)
+
+
+@app.route('/money_pots/<int:money_pot_id>', methods=['PATCH'])
+def patch_money_pots(money_pot_id):
+    data = request.get_json()
+    title = data.get('title', None)
+    description = data.get('description', None)
+    target = data.get('target', None)
+    status = data.get('status', None)
+
+    selection = MoneyPot.query.filter(MoneyPot.id == money_pot_id).one_or_none()
+
+    if selection is not None:
+        if title is not None:
+            selection.title = title
+
+        if description is not None:
+            selection.description = description
+
+        if target is not None:
+            selection.target = target
+
+        if status is not None:
+            selection.status = status
+
+        selection.update()
+
+        return jsonify({
+            "success": True
+        })
+
+
+@app.route('/money_pots/<int:money_pot_id>', methods=['DELETE'])
+def delete_money_pots(money_pot_id):
+
+    selection = MoneyPot.query.filter(MoneyPot.id == money_pot_id).one_or_none()
+
+    if selection is not None:
+        selection.delete()
+
+        return jsonify({
+            "success": True
+        })
 
 
 @app.route('/pledges', methods=['POST'])
