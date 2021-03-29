@@ -11,8 +11,7 @@ There are two types of users : Fundraisers and Contributors. Fundraisers create 
 Contributors pledge money to Money_pots. 
 
 - a Fundraiser creates a Money_pot to raise money
-- a Fundraiser updates or deletes a Money_pot at will
-- a Money_pot stays open until the target is reached or the Fundraiser deletes the Money_pot
+- a Fundraiser updates, closes or deletes a Money_pot at will
 
 - the list of all open Money_pots is accessible to both Fundraisers and Contributors
 - a User pledges money to any Money_pot
@@ -39,5 +38,9 @@ permissions: post:money_pot, patch:money_pot, get:money_pot-details, delete:mone
 curl -X GET http://127.0.0.1:8080/users
 curl -X GET http://127.0.0.1:8080/money_pots
 
+POST MONEY_POT:
+curl -X POST http://127.0.0.1:8080/money_pots -H "Content-Type: application/json" -d '{"title":"second money_pot", "description":"This is the second one.", "target":"100", "owner_id":"1"}'
+
+POST PLEDGE:
 curl -X POST http://127.0.0.1:8080/pledges -H "Content-Type: application/json" -d '{"user_id":"2", "money_pot_id":"1", "amount":"10"}'
 

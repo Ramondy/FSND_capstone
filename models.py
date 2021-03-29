@@ -115,7 +115,6 @@ class MoneyPot(db.Model):
                 'message': "The Money Pot is closed."
             }
 
-
     def insert(self):
         db.session.add(self)
         db.session.commit()

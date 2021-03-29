@@ -27,6 +27,26 @@ def get_users():
     return jsonify(users)
 
 
+@app.route('/money_pots', methods=['POST'])
+def create_money_pot():
+    data = request.get_json()
+    title = data.get('title', None)
+    description = data.get('description', None)
+    target = data.get('target', 0)
+    owner_id = data.get('owner_id', None)
+
+    if (title is not None) & (owner_id is not None):
+        target = int(target)
+        owner_id = int(owner_id)
+
+        new_money_pot = MoneyPot(title=title, description=description, target=target, owner_id=owner_id)
+        new_money_pot.insert()
+
+        return jsonify({
+            'success': True
+        })
+
+
 @app.route('/money_pots', methods=['GET'])
 def get_money_pots():
     money_pots = MoneyPot.query.all()
