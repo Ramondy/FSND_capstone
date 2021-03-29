@@ -35,9 +35,11 @@ migrate = Migrate(app, db)
 # Models.
 # ----------------------------------------------------------------------------#
 
+
 class User(db.Model):
     __tablename__ = 'users'
 
+    # ATTRIBUTES
     id = Column(db.Integer, primary_key=True)
     name = Column(db.String)
     email = Column(db.String)
@@ -45,10 +47,34 @@ class User(db.Model):
     # RELATIONSHIPS
     money_pots = db.relationship('MoneyPot', backref='owner')
 
+    # METHODS
+    def __init__(self, name, email):
+        self.name = name
+        self.email = email
+
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def update(self):
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    def format(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'email': self.email  # ,'money_pots': self.money_pots
+        }
+
 
 class MoneyPot(db.Model):
     __tablename__ = 'money_pots'
 
+    # ATTRIBUTES
     id = Column(Integer, primary_key=True)
     title = Column(String)
     description = Column(String)
@@ -56,3 +82,33 @@ class MoneyPot(db.Model):
     pledge_total = Column(Integer)
     status = Column(String)
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+    # METHODS
+    def __init__(self, title, description, target, owner_id):
+        self.title = title
+        self.description = description
+        self.target = target
+        self.pledge_total = 0
+        self.status = 'open'
+        self.owner_id = owner_id
+
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def update(self):
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    def format(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'target': self.target,
+            'pledge_total': self.pledge_total,
+            'status': self.status,
+            'owner_id': self.owner_id
+        }

@@ -1,4 +1,5 @@
 starter/
 TODO.txt
-
+.env
+db_populate.txt
 __pycache__/

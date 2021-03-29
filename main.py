@@ -18,6 +18,19 @@ from models import *
 def health_check():
     return jsonify("Healthy")
 
+
+@app.route('/users', methods=['GET'])
+def get_users():
+    users = User.query.all()
+    users = [user.format() for user in users]
+    return jsonify(users)
+
+@app.route('/money_pots', methods=['GET'])
+def get_money_pots():
+    money_pots = MoneyPot.query.all()
+    money_pots = [money_pot.format() for money_pot in money_pots]
+    return jsonify(money_pots)
+
 # ----------------------------------------------------------------------------#
 # Launch.
 # ----------------------------------------------------------------------------#
