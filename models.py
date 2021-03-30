@@ -4,11 +4,12 @@
 
 import os
 from flask import Flask
-from flask_moment import Moment
 from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-
 from sqlalchemy import Column, String, Integer
+
+from flask_migrate import Migrate
+from flask_cors import CORS
+# from flask_moment import Moment
 
 from dotenv import load_dotenv
 
@@ -24,13 +25,22 @@ database_path = "postgresql+psycopg2://{}:{}@{}/{}".format(database_user, databa
 
 
 app = Flask(__name__)
-moment = Moment(app)
+# moment = Moment(app)
 app.config["SQLALCHEMY_DATABASE_URI"] = database_path
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["DEBUG"] = True
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
+
+CORS(app)
+
+
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,POST,PATCH,DELETE')
+    return response
 # ----------------------------------------------------------------------------#
 # Models.
 # ----------------------------------------------------------------------------#
