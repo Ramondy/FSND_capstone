@@ -54,7 +54,7 @@ def create_app():
 
 
     @app.route('/money_pots', methods=['POST'])
-    def create_money_pot():
+    def post_money_pot():
         data = request.get_json()
         title = data.get('title', None)
         description = data.get('description', None)
@@ -65,12 +65,21 @@ def create_app():
             target = int(target)
             owner_id = int(owner_id)
 
-            new_money_pot = MoneyPot(title=title, description=description, target=target, owner_id=owner_id)
-            new_money_pot.insert()
+            try:
 
-            return jsonify({
-                'success': True
-            })
+                new_money_pot = MoneyPot(title=title, description=description, target=target, owner_id=owner_id)
+                new_money_pot.insert()
+
+                return jsonify({
+                    'success': True,
+                    'money_pot_id': new_money_pot.id
+                }), 200
+
+            except:
+                abort(500)
+
+        else:
+            abort(400)
 
 
     @app.route('/money_pots', methods=['GET'])
@@ -91,7 +100,7 @@ def create_app():
 
 
     @app.route('/money_pots/<int:money_pot_id>', methods=['PATCH'])
-    def patch_money_pots(money_pot_id):
+    def patch_money_pot(money_pot_id):
         data = request.get_json()
         title = data.get('title', None)
         description = data.get('description', None)
@@ -121,16 +130,24 @@ def create_app():
 
 
     @app.route('/money_pots/<int:money_pot_id>', methods=['DELETE'])
-    def delete_money_pots(money_pot_id):
+    def delete_money_pot(money_pot_id):
 
         selection = MoneyPot.query.filter(MoneyPot.id == money_pot_id).one_or_none()
 
         if selection is not None:
-            selection.delete()
+            try:
+                selection.delete()
 
-            return jsonify({
-                "success": True
-            })
+                return jsonify({
+                    "success": True,
+                    "money_pot_id": money_pot_id
+                }), 200
+
+            except:
+                abort(500)
+
+        else:
+            abort(404)
 
 
     @app.route('/pledges', methods=['POST'])
@@ -156,6 +173,14 @@ def create_app():
     # Error handlers.
     # ----------------------------------------------------------------------------#
 
+    @app.errorhandler(400)
+    def not_found(error):
+        return jsonify({
+            "success": False,
+            "error": 400,
+            "message": "Bad request."
+        }), 400
+
     @app.errorhandler(404)
     def not_found(error):
         return jsonify({
@@ -163,6 +188,14 @@ def create_app():
             "error": 404,
             "message": "Resource not found."
         }), 404
+
+    @app.errorhandler(500)
+    def server_error(error):
+        return jsonify({
+            "success": False,
+            "error": 500,
+            "message": "Server error."
+        }), 500
 
     return app
 

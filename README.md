@@ -36,6 +36,8 @@ permissions: post:money_pot, patch:money_pot, get:money_pot-details, delete:mone
 - Pledge:
 - User
 
+## tests
+
 curl -X GET http://127.0.0.1:8080/users
 curl -X GET http://127.0.0.1:8080/money_pots
 
