@@ -29,7 +29,7 @@ def create_app():
 
     @app.route('/', methods=['GET'])
     def health_check():
-        return jsonify("Healthy")
+        return jsonify("Healthy"), 200
 
 
     # NOT USEFUL UNDER CURRENT SCOPE
