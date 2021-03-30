@@ -1,7 +1,8 @@
 # ----------------------------------------------------------------------------#
 # Imports
 # ----------------------------------------------------------------------------#
-
+from flask import Flask
+from flask_cors import CORS
 from flask import jsonify, request, abort
 from models import *
 
@@ -16,6 +17,7 @@ from models import *
 
 def create_app():
     app = Flask(__name__)
+    app.config.from_object('config')
     setup_db(app)
     CORS(app)
 

@@ -1,30 +1,17 @@
 # ----------------------------------------------------------------------------#
 # Imports
 # ----------------------------------------------------------------------------#
-
-import os
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, String, Integer
 
-from dotenv import load_dotenv
-
 # ----------------------------------------------------------------------------#
-# Configuration: application, ORM, CORS
+# Configuration: tying Flask App and SQLAlchemy
 # ----------------------------------------------------------------------------#
-load_dotenv()
-database_name = 'fundraising'
-database_user = os.getenv('DBUSER')
-database_pw = os.getenv('DBPW')
-database_host = os.getenv('DBHOST')
-database_path = "postgresql+psycopg2://{}:{}@{}/{}".format(database_user, database_pw, database_host, database_name)
 
 db = SQLAlchemy()
 
 
 def setup_db(app):
-    app.config["SQLALCHEMY_DATABASE_URI"] = database_path
-    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    app.config["DEBUG"] = True
     db.app = app
     db.init_app(app)
 
