@@ -31,7 +31,6 @@ def create_app():
     def health_check():
         return jsonify("Healthy"), 200
 
-
     # NOT USEFUL UNDER CURRENT SCOPE
     @app.route('/users', methods=['GET'])
     def get_users():
@@ -39,20 +38,22 @@ def create_app():
         users = [user.format() for user in users]
         return jsonify(users)
 
-
+    # a Contributor can get details of his pledges
     @app.route('/users/<int:user_id>', methods=['GET'])
     def get_user_details(user_id):
         selection_user = User.query.filter(User.id == user_id).one_or_none()
 
-        if selection_user is None:
+        if selection_user is not None:
+
+            return jsonify({
+                'success': True,
+                'user_details': selection_user.format()
+            }), 200
+
+        else:
             abort(404)
 
-        return jsonify({
-            'success': True,
-            'user details': selection_user.format()
-        }), 200
-
-
+    # a Fundraiser creates a Money_pot to raise money
     @app.route('/money_pots', methods=['POST'])
     def post_money_pot():
         data = request.get_json()
@@ -81,14 +82,24 @@ def create_app():
         else:
             abort(400)
 
-
+    # the list of all Money_pots is accessible to both Fundraisers and Contributors
     @app.route('/money_pots', methods=['GET'])
     def get_money_pots():
         money_pots = MoneyPot.query.all()
-        money_pots = [money_pot.format() for money_pot in money_pots]
-        return jsonify(money_pots)
 
+        if money_pots is not None:
 
+            money_pots = [money_pot.format() for money_pot in money_pots]
+
+            return jsonify({
+                "success": True,
+                "money_pots": money_pots
+            }), 200
+
+        else:
+            abort(404)
+
+    # a Fundraiser can get details of all pledges for a Money_pot
     @app.route('/money_pots/<int:money_pot_id>', methods=['GET'])
     def get_money_pot_details(money_pot_id):
 
@@ -96,9 +107,17 @@ def create_app():
         if selection_money_pot is not None:
 
             selection_pledges = [pledge.format() for pledge in selection_money_pot.pledges]
-            return jsonify(selection_money_pot.format(), selection_pledges)
+            return jsonify({
+                "success": True,
+                "money_pot_id": money_pot_id,
+                "money pot": selection_money_pot.format(),
+                "pledges": selection_pledges
+            }), 200
 
+        else:
+            abort(404)
 
+    # a Fundraiser updates or deletes a Money_pot at will
     @app.route('/money_pots/<int:money_pot_id>', methods=['PATCH'])
     def patch_money_pot(money_pot_id):
         data = request.get_json()
@@ -125,10 +144,14 @@ def create_app():
             selection.update()
 
             return jsonify({
-                "success": True
-            })
+                "success": True,
+                "money_pot_id": money_pot_id
+            }), 200
 
+        else:
+            abort(404)
 
+    # a Fundraiser updates or deletes a Money_pot at will
     @app.route('/money_pots/<int:money_pot_id>', methods=['DELETE'])
     def delete_money_pot(money_pot_id):
 
@@ -149,7 +172,7 @@ def create_app():
         else:
             abort(404)
 
-
+    # a Contributor pledges money to any Money_pot
     @app.route('/pledges', methods=['POST'])
     def create_pledge():
         data = request.get_json()
@@ -162,12 +185,20 @@ def create_app():
             money_pot_id = int(money_pot_id)
             amount = int(amount)
 
-            new_pledge = Pledge(user_id=user_id, money_pot_id=money_pot_id, amount=amount)
-            new_pledge.insert()
+            try:
+                new_pledge = Pledge(user_id=user_id, money_pot_id=money_pot_id, amount=amount)
+                new_pledge.insert()
 
-            return jsonify({
-                'success': True
-            })
+                return jsonify({
+                    'success': True,
+                    'pledge_id': new_pledge.id
+                }), 200
+
+            except:
+                abort(500)
+
+        else:
+            abort(400)
 
     # ----------------------------------------------------------------------------#
     # Error handlers.

@@ -10,13 +10,14 @@
 There are two types of users : Fundraisers and Contributors. Fundraisers create Money_pots,
 Contributors pledge money to Money_pots. 
 
-DONE - a Fundraiser creates a Money_pot to raise money
-DONE - a Fundraiser updates, closes or deletes a Money_pot at will
+DONE, TESTED - a Fundraiser creates a Money_pot to raise money
+DONE, TESTED - a Fundraiser updates or deletes a Money_pot at will
 
-DONE - the list of all open Money_pots is accessible to both Fundraisers and Contributors
-DONE - a Contributor pledges money to any Money_pot
+DONE, TESTED - the list of all Money_pots is accessible to both Fundraisers and Contributors
+DONE, TESTED - a Fundraiser can get details of all pledges for a Money_pot (get_money_pot_details)
+DONE, TESTED - a Contributor pledges money to any Money_pot
 - a Contributor can get details of his pledges
-- a Fundraiser can get details of all pledges for a Money_Pot
+
 
 ## Auth0 User IDs
 API: FSND
