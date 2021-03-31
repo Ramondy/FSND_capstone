@@ -61,3 +61,5 @@ curl -X PATCH http://127.0.0.1:8080/money_pots/2 -H "Content-Type: application/j
 
 DELETE MONEY_POT:
 curl -X DELETE http://127.0.0.1:8080/money_pots/3 -H "Content-Type: application/json"
+
+curl -X GET https://fundmyfun.herokuapp.com/users
