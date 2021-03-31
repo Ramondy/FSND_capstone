@@ -1,6 +1,9 @@
 # ----------------------------------------------------------------------------#
 # Imports
 # ----------------------------------------------------------------------------#
+import os
+from dotenv import load_dotenv
+
 from flask import Flask
 from flask_cors import CORS
 from flask_migrate import Migrate
@@ -16,9 +19,11 @@ from models import *
 # Controllers.
 # ----------------------------------------------------------------------------#
 
-def create_app():
+def create_app(database_path):
     app = Flask(__name__)
-    app.config.from_object('config')
+    app.config["SQLALCHEMY_DATABASE_URI"] = database_path
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    app.config["DEBUG"] = True
     setup_db(app)
     migrate = Migrate(app, db)
 
@@ -233,7 +238,9 @@ def create_app():
 
     return app
 
-app = create_app()
+
+load_dotenv()
+app = create_app(os.environ.get('DATABASE_URL'))
 
 # ----------------------------------------------------------------------------#
 # Launch.
