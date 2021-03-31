@@ -1,5 +1,10 @@
 # FSND_capstone: "Fund My Fun" -- a web app to raise money from friends, family and fools 
 
+https://fundmyfun.herokuapp.com/
+https://git.heroku.com/fundmyfun.git
+DATABASE_URL: postgres://irfswhdcwujhtd:118bc1b5d9d359a303458d6f4072d1344bce899394f8ba4c5e73c70b8f9bbbf1@ec2-23-22-191-232.compute-1.amazonaws.com:5432/d8pmnceds530km
+
+
 ## Stack
 - Flask, PSQL, SQLAlchemy
 - Auth0
