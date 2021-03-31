@@ -239,13 +239,14 @@ def create_app(database_path):
     return app
 
 
-load_dotenv()
-app = create_app(os.environ.get('DATABASE_URL'))
+# load_dotenv()
+# app = create_app(os.environ.get('DATABASE_URL'))
 
 # ----------------------------------------------------------------------------#
 # Launch.
 # ----------------------------------------------------------------------------#
 
-# if __name__ == '__main__':
-#     app = create_app()
-#     app.run(host='127.0.0.1', port=8080, debug=True)
+if __name__ == '__main__':
+    load_dotenv()
+    app = create_app(os.environ.get('DATABASE_URL'))
+    app.run(debug=True)
