@@ -1,47 +1,41 @@
-# FSND_capstone: "Fund My Fun" -- a web app to raise money from friends, family and fools 
+# FSND_capstone: "Fund My Fun" -- a Backend API to raise money from friends, family and fools 
 
-https://fundmyfun.herokuapp.com/
-https://git.heroku.com/fundmyfun.git
-DATABASE_URL: postgres://irfswhdcwujhtd:118bc1b5d9d359a303458d6f4072d1344bce899394f8ba4c5e73c70b8f9bbbf1@ec2-23-22-191-232.compute-1.amazonaws.com:5432/d8pmnceds530km
+## Getting Started
 
-heroku run python manage.py db upgrade --app fundmyfun
+The application is deployed to Heroku together with a ready-to-use PostgreSQL database for the duration of the
+FSND capstone project assessment at the following url: https://fundmyfun.herokuapp.com/
 
 ## Stack
-- Flask, PSQL, SQLAlchemy
+- Flask, SQLAlchemy
+- PostgreSQL
 - Auth0
-- Docker, Heroku
+- Heroku
 
-## Use Cases
+## User types
 
-There are two types of users : Fundraisers and Contributors. Fundraisers create Money_pots,
+There are two types of users : Fundraisers and Contributors. Fundraisers manage Money_pots,
 Contributors pledge money to Money_pots. 
+The production db already contains one user of each type:
+### {user.name: Fundraiser, user.id: 1}
+role: Fundraiser |
+user_email: dhihpmqp@sharklasers.com |
+user_pw: dhihpmqp |
+permissions: post:money_pot, patch:money_pot, get:money_pot-details, delete:money_pot
 
-DONE, TESTED - a Fundraiser creates a Money_pot to raise money
-DONE, TESTED - a Fundraiser updates or deletes a Money_pot at will
-
-DONE, TESTED - the list of all Money_pots is accessible to both Fundraisers and Contributors
-DONE, TESTED - a Fundraiser can get details of all pledges for a Money_pot (get_money_pot_details)
-DONE, TESTED - a Contributor pledges money to any Money_pot
-DONE, TESTED - a Contributor can get details of his pledges
-
-
-## Auth0 User IDs
-API: FSND
-
+### {user.name: Contributor, user.id: 2}
 role: Contributor | 
 user_email: lcufnlul@sharklasers.com |
 user_pw: lcufnlul |
 permissions: get:money_pot, post:pledge, delete:pledge
 
-role: Fundraiser |
-user_email: dhihpmqp@sharklasers.com |
-user_pw: dhihpmqp |
-permissions: post:money_pot, patch:money_pot, get:money_pot-details, delete:money_pot, 
+## User Stories
+- a Fundraiser creates a Money_pot to raise money
+- a Fundraiser updates or deletes a Money_pot at will
 
-## Models
-- Money_pot:
-- Pledge:
-- User
+- the list of all Money_pots is accessible to both Fundraisers and Contributors
+- a Fundraiser can get details of all pledges for a Money_pot (get_money_pot_details)
+- a Contributor pledges money to any Money_pot
+- a Contributor can get details of his pledges
 
 ## tests
 
