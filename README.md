@@ -16,7 +16,7 @@ DONE, TESTED - a Fundraiser updates or deletes a Money_pot at will
 DONE, TESTED - the list of all Money_pots is accessible to both Fundraisers and Contributors
 DONE, TESTED - a Fundraiser can get details of all pledges for a Money_pot (get_money_pot_details)
 DONE, TESTED - a Contributor pledges money to any Money_pot
-- a Contributor can get details of his pledges
+DONE, TESTED - a Contributor can get details of his pledges
 
 
 ## Auth0 User IDs
