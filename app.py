@@ -67,7 +67,6 @@ def create_app(database_path):
                 new_money_pot.insert()
 
                 return jsonify({
-                    'success': True,
                     'money_pot_id': new_money_pot.id
                 }), 200
 
@@ -87,7 +86,6 @@ def create_app(database_path):
             money_pots = [money_pot.format() for money_pot in money_pots]
 
             return jsonify({
-                "success": True,
                 "money_pots": money_pots
             }), 200
 
@@ -104,8 +102,6 @@ def create_app(database_path):
 
             selection_pledges = [pledge.format() for pledge in selection_money_pot.pledges]
             return jsonify({
-                "success": True,
-                "money_pot_id": money_pot_id,
                 "money pot": selection_money_pot.format(),
                 "pledges": selection_pledges
             }), 200
@@ -141,7 +137,6 @@ def create_app(database_path):
             selection.update()
 
             return jsonify({
-                "success": True,
                 "money_pot_id": money_pot_id
             }), 200
 
@@ -172,7 +167,6 @@ def create_app(database_path):
                         abort(500)
 
                 return jsonify({
-                    "success": True,
                     "money_pot_id": money_pot_id
                 }), 200
 
@@ -201,7 +195,6 @@ def create_app(database_path):
                 new_pledge.insert()
 
                 return jsonify({
-                    'success': True,
                     'pledge_id': new_pledge.id
                 }), 200
 
@@ -220,7 +213,6 @@ def create_app(database_path):
         if selection_user is not None:
 
             return jsonify({
-                'success': True,
                 'user_details': selection_user.format()
             }), 200
 

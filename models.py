@@ -50,10 +50,7 @@ class User(db.Model):
 
     def format(self):
         return {
-            'id': self.id,
-            'name': self.name,
-            'email': self.email,
-            # 'money_pots': [money_pot.format() for money_pot in self.money_pots],
+            'user_id': self.id,
             'pledges': [pledge.format() for pledge in self.pledges]
         }
 
@@ -171,7 +168,7 @@ class Pledge(db.Model):
 
     def format(self):
         return {
-            'id': self.id,
+            'pledge_id': self.id,
             'user_id': self.user_id,
             'money_pot_id': self.money_pot_id,
             'amount': self.amount
