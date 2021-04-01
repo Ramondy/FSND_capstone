@@ -11,11 +11,6 @@ from models import setup_db
 Tests are performed only locally. You must create a local PostgreSQL db ('fundraising') and assign the env variables
  in a .env file.  
 """
-# database_name = os.getenv('DBNAME')
-# database_user = os.getenv('DBUSER')
-# database_pw = os.getenv('DBPW')
-# database_host = os.getenv('DBHOST')
-# database_path = "postgresql+psycopg2://{}:{}@{}/{}".format(database_user, database_pw, database_host, database_name)
 
 
 class FundMyFunTestCase(unittest.TestCase):
@@ -24,12 +19,6 @@ class FundMyFunTestCase(unittest.TestCase):
     def setUp(self):
         """Executed before reach test"""
         load_dotenv()
-        # self.database_name = os.getenv('DBNAME')
-        # self.database_user = os.getenv('DBUSER')
-        # self.database_pw = os.getenv('DBPW')
-        # self.database_host = os.getenv('DBHOST')
-        # self.database_path = "postgresql+psycopg2://{}:{}@{}/{}".format(self.database_user, self.database_pw,
-        #                                                                 self.database_host, self.database_name)
         self.database_path = os.getenv('DATABASE_URL')
         self.app = create_app(self.database_path)
         self.client = self.app.test_client
