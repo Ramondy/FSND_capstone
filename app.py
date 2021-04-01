@@ -8,7 +8,9 @@ from flask import Flask
 from flask_cors import CORS
 from flask_migrate import Migrate
 from flask import jsonify, request, abort
+
 from models import *
+from auth import requires_auth
 
 # ----------------------------------------------------------------------------#
 # Helpers.
@@ -39,7 +41,6 @@ def create_app(database_path):
     def health_check():
         return jsonify("Healthy"), 200
 
-    # NOT USEFUL UNDER CURRENT SCOPE
     @app.route('/users', methods=['GET'])
     def get_users():
         users = User.query.all()
@@ -48,7 +49,8 @@ def create_app(database_path):
 
     # a Contributor can get details of his pledges
     @app.route('/users/<int:user_id>', methods=['GET'])
-    def get_user_details(user_id):
+    @requires_auth(permission='get:user-details')
+    def get_user_details(payload, user_id):
         selection_user = User.query.filter(User.id == user_id).one_or_none()
 
         if selection_user is not None:
@@ -63,7 +65,8 @@ def create_app(database_path):
 
     # a Fundraiser creates a Money_pot to raise money
     @app.route('/money_pots', methods=['POST'])
-    def post_money_pot():
+    @requires_auth(permission='post:money_pot')
+    def post_money_pot(payload):
         data = request.get_json()
         title = data.get('title', None)
         description = data.get('description', None)
@@ -109,7 +112,8 @@ def create_app(database_path):
 
     # a Fundraiser can get details of all pledges for a Money_pot
     @app.route('/money_pots/<int:money_pot_id>', methods=['GET'])
-    def get_money_pot_details(money_pot_id):
+    @requires_auth(permission='get:money_pot-details')
+    def get_money_pot_details(payload, money_pot_id):
 
         selection_money_pot = MoneyPot.query.filter(MoneyPot.id == money_pot_id).one_or_none()
         if selection_money_pot is not None:
@@ -127,7 +131,8 @@ def create_app(database_path):
 
     # a Fundraiser updates or deletes a Money_pot at will
     @app.route('/money_pots/<int:money_pot_id>', methods=['PATCH'])
-    def patch_money_pot(money_pot_id):
+    @requires_auth(permission='patch:money_pot')
+    def patch_money_pot(payload, money_pot_id):
         data = request.get_json()
         title = data.get('title', None)
         description = data.get('description', None)
@@ -161,7 +166,8 @@ def create_app(database_path):
 
     # a Fundraiser updates or deletes a Money_pot at will
     @app.route('/money_pots/<int:money_pot_id>', methods=['DELETE'])
-    def delete_money_pot(money_pot_id):
+    @requires_auth(permission='delete:money_pot')
+    def delete_money_pot(payload, money_pot_id):
 
         selection = MoneyPot.query.filter(MoneyPot.id == money_pot_id).one_or_none()
 
@@ -182,7 +188,8 @@ def create_app(database_path):
 
     # a Contributor pledges money to any Money_pot
     @app.route('/pledges', methods=['POST'])
-    def create_pledge():
+    @requires_auth(permission='post:pledge')
+    def create_pledge(payload):
         data = request.get_json()
         user_id = data.get('user_id', None)
         money_pot_id = data.get('money_pot_id', None)
@@ -219,6 +226,14 @@ def create_app(database_path):
             "error": 400,
             "message": "Bad request."
         }), 400
+
+    @app.errorhandler(401)
+    def not_found(error):
+        return jsonify({
+            "success": False,
+            "error": 401,
+            "message": "Unauthorized."
+        }), 401
 
     @app.errorhandler(404)
     def not_found(error):

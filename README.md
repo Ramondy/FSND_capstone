@@ -19,14 +19,12 @@ The production db already contains one user of each type:
 ### {user.name: Fundraiser, user.id: 1}
 role: Fundraiser |
 user_email: dhihpmqp@sharklasers.com |
-user_pw: dhihpmqp |
-permissions: post:money_pot, patch:money_pot, get:money_pot-details, delete:money_pot
+permissions: post:money_pot, get:money_pot-details, patch:money_pot, delete:money_pot
 
 ### {user.name: Contributor, user.id: 2}
 role: Contributor | 
 user_email: lcufnlul@sharklasers.com |
-user_pw: lcufnlul |
-permissions: get:money_pot, post:pledge, delete:pledge
+permissions: get:user-details, post:pledge
 
 ## User Stories
 - a Fundraiser creates a Money_pot to raise money
