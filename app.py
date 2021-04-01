@@ -41,27 +41,11 @@ def create_app(database_path):
     def health_check():
         return jsonify("Healthy"), 200
 
-    @app.route('/users', methods=['GET'])
-    def get_users():
-        users = User.query.all()
-        users = [user.format() for user in users]
-        return jsonify(users)
-
-    # a Contributor can get details of his pledges
-    @app.route('/users/<int:user_id>', methods=['GET'])
-    @requires_auth(permission='get:user-details')
-    def get_user_details(payload, user_id):
-        selection_user = User.query.filter(User.id == user_id).one_or_none()
-
-        if selection_user is not None:
-
-            return jsonify({
-                'success': True,
-                'user_details': selection_user.format()
-            }), 200
-
-        else:
-            abort(404)
+    # @app.route('/users', methods=['GET'])
+    # def get_users():
+    #     users = User.query.all()
+    #     users = [user.format() for user in users]
+    #     return jsonify(users)
 
     # a Fundraiser creates a Money_pot to raise money
     @app.route('/money_pots', methods=['POST'])
@@ -169,11 +153,23 @@ def create_app(database_path):
     @requires_auth(permission='delete:money_pot')
     def delete_money_pot(payload, money_pot_id):
 
-        selection = MoneyPot.query.filter(MoneyPot.id == money_pot_id).one_or_none()
+        selection_money_pot = MoneyPot.query.filter(MoneyPot.id == money_pot_id).one_or_none()
 
-        if selection is not None:
+        if selection_money_pot is not None:
+
+            selection_pledges = selection_money_pot.pledges
+
             try:
-                selection.delete()
+                selection_money_pot.delete()
+
+                if selection_pledges is not None:
+
+                    try:
+                        for each in selection_pledges:
+                            each.delete()
+
+                    except:
+                        abort(500)
 
                 return jsonify({
                     "success": True,
@@ -214,6 +210,22 @@ def create_app(database_path):
 
         else:
             abort(400)
+
+    # a Contributor can get details of his pledges
+    @app.route('/users/<int:user_id>', methods=['GET'])
+    @requires_auth(permission='get:user-details')
+    def get_user_details(payload, user_id):
+        selection_user = User.query.filter(User.id == user_id).one_or_none()
+
+        if selection_user is not None:
+
+            return jsonify({
+                'success': True,
+                'user_details': selection_user.format()
+            }), 200
+
+        else:
+            abort(404)
 
     # ----------------------------------------------------------------------------#
     # Error handlers.
